@@ -1,55 +1,84 @@
-import streamlit as st
+st.components.v1.html("""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    text-align: center;
+}
 
-# 1. Configuração da Página (Isso tem que ser a primeira coisa!)
-st.set_page_config(page_title="Para Sofia 🎀", page_icon="💖")
+/* mensagem */
+#mensagem {
+    font-size: 28px;
+    color: #ff0066;
+    margin-top: 20px;
+    font-weight: bold;
+    animation: fade 1s;
+}
 
-# 2. Estilo Visual (CSS)
-st.markdown("""
-    <style>
-    .stApp {
-        background-color: #fff0f5;
-    }
-    .kitty-flutuando {
-        display: block;
-        margin: auto;
-        width: 200px;
-        animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0px); }
-    }
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        border: 2px solid #ff69b4;
-        text-align: center;
-        margin-bottom: 10px;
-        color: #d02090;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+@keyframes fade {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+</style>
+</head>
 
-# 3. Imagem da Hello Kitty (Link do Giphy que é o mais estável do mundo)
-st.markdown('<img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXU2Z3ZwaG9vNm54M2Z4eG54eG54eG54eG54eG54eG54eGZpYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v6p6S8T0A0XN6/giphy.gif" class="kitty-flutuando">', unsafe_allow_html=True)
+<body>
 
-# 4. Título
-st.write(f"<h1 style='text-align: center; color: #ff69b4;'>Para Sofia 🎀</h1>", unsafe_allow_html=True)
+<!-- PLAYER YOUTUBE -->
+<div id="player"></div>
 
-# 5. Música (Mandei o embed do YouTube)
-st.video("https://youtu.be/l4DAcyXkX0E")
+<!-- MENSAGEM -->
+<div id="mensagem">💖</div>
 
-st.write("---")
+<script>
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
 
-# 6. Mini Cards com Poemas
-st.markdown('<div class="card">🌸 <b>Doce Sofia</b><br>Nem o laço mais bonito,<br>nem a flor mais colorida,<br>superam o teu sorriso,<br>que ilumina minha vida.</div>', unsafe_allow_html=True)
+var player;
 
-st.markdown('<div class="card">🎀 <b>Simplicidade</b><br>Gosto da tua presença,<br>desse teu jeito de ser.<br>Sofia, o mundo é sorte<br>por ter você pra viver.</div>', unsafe_allow_html=True)
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        height: '200',
+        width: '300',
+        videoId: '7lNfLy6-xxE',
+        playerVars: {
+            'autoplay': 1,
+            'controls': 1
+        },
+        events: {
+            'onReady': onPlayerReady
+        }
+    });
+}
 
-# 7. Botão de Interação
-if st.button("Clique para um carinho 🐾"):
-    st.balloons()
-    st.snow()
-    st.success("Você é especial, Sofia!")
+function onPlayerReady(event) {
+    setInterval(updateMensagem, 500);
+}
+
+function updateMensagem() {
+    if (!player || !player.getCurrentTime) return;
+
+    var tempo = player.getCurrentTime();
+    var msg = "";
+
+    if (tempo < 10) msg = "Sofia... 💖";
+    else if (tempo < 20) msg = "Desde que você entrou na minha vida...";
+    else if (tempo < 30) msg = "Tudo ficou mais bonito ✨";
+    else if (tempo < 40) msg = "Você é minha paz...";
+    else if (tempo < 50) msg = "Minha felicidade...";
+    else if (tempo < 60) msg = "Minha Pitica 🐱💕";
+    else if (tempo < 75) msg = "Eu te amo mais do que palavras podem explicar...";
+    else if (tempo < 90) msg = "E escolheria você...";
+    else if (tempo < 110) msg = "Em todas as vidas 💞";
+    else if (tempo < 140) msg = "Obrigado por existir, Sofia...";
+    else msg = "Você é tudo pra mim 💖";
+
+    document.getElementById("mensagem").innerText = "✨ " + msg;
+}
+</script>
+
+</body>
+</html>
+""", height=350)
